@@ -1,23 +1,28 @@
 using UnityEngine;
 using System;
 
+[RequireComponent(typeof(ObjectsStorage))]
 public class ObjectsController : MonoBehaviour
 {
-    [SerializeField] private ObjectsStorage _storage;
+    private ObjectsStorage _storage;
 
+    public event Action Stoped;
     public event Action<Transform> TargetChanged;
 
     private void OnEnable()
     {
-        if(_storage == null)
-            throw new NullReferenceException("Storage component is null");
-
+        _storage = GetComponent<ObjectsStorage>();
         Init();
     }
 
     public void SetNewTarget(Transform target)
     {
         TargetChanged?.Invoke(target);
+    }
+
+    public void Stop()
+    {
+        Stoped?.Invoke();
     }
 
     private void Init()
